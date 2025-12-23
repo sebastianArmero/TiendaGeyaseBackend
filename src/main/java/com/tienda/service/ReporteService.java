@@ -1,58 +1,54 @@
 package com.tienda.service;
 
-import com.tienda.dto.request.FiltroReporteRequest;
-import com.tienda.dto.response.*;
-import org.springframework.data.domain.Pageable;
+import com.tienda.dto.response.CierreCajaResponse;
+import com.tienda.dto.response.ReporteInventarioResponse;
+import com.tienda.dto.response.ReporteVentaResponse;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public interface ReporteService {
 
-    // ============ CIERRE DIARIO ============
-    CierreCajaResponse generarCierreDiario(Long cajaId, LocalDate fecha);
-    CierreCajaResponse obtenerCierreDiario(Long cajaId, LocalDate fecha);
-    List<CierreCajaResponse> obtenerHistorialCierres(LocalDate fechaInicio, LocalDate fechaFin);
-    byte[] exportarCierreDiarioPDF(Long cierreId);
-    byte[] exportarCierreDiarioExcel(Long cierreId);
+    // ============ CIERRE DE CAJA ============
+    CierreCajaResponse iniciarCierreCaja(Long cajaId, Long usuarioId, BigDecimal saldoInicial);
+    CierreCajaResponse finalizarCierreCaja(Long id, BigDecimal saldoFinalReal, String observaciones);
+    CierreCajaResponse obtenerCierreCajaPorId(Long id);
+    CierreCajaResponse obtenerCierreCajaHoy(Long cajaId);
+    List<CierreCajaResponse> obtenerCierresCaja(Long cajaId, LocalDate fechaDesde, LocalDate fechaHasta, String estado);
+    CierreCajaResponse conciliarCierreCaja(Long id, Long usuarioId, String observaciones);
 
     // ============ REPORTES DE VENTAS ============
-    ReporteVentaResponse generarReporteVentas(FiltroReporteRequest filtro);
-    Map<String, Object> generarEstadisticasVentas(LocalDate fechaInicio, LocalDate fechaFin);
-    List<ReporteVentaResponse> generarReporteVentasPorVendedor(LocalDate fechaInicio, LocalDate fechaFin);
-    List<ReporteVentaResponse> generarReporteVentasPorProducto(LocalDate fechaInicio, LocalDate fechaFin);
-    List<ReporteVentaResponse> generarReporteVentasPorCategoria(LocalDate fechaInicio, LocalDate fechaFin);
+    ReporteVentaResponse generarReporteVentasDiario(LocalDate fecha);
+    ReporteVentaResponse generarReporteVentasMensual(int mes, int año);
+    ReporteVentaResponse generarReporteVentasRango(LocalDate fechaDesde, LocalDate fechaHasta);
+    List<Map<String, Object>> generarReporteVentasPorVendedor(LocalDate fechaDesde, LocalDate fechaHasta);
+    List<Map<String, Object>> generarReporteVentasPorProducto(LocalDate fechaDesde, LocalDate fechaHasta);
+    List<Map<String, Object>> generarReporteVentasPorCliente(LocalDate fechaDesde, LocalDate fechaHasta);
 
     // ============ REPORTES DE INVENTARIO ============
-    ReporteInventarioResponse generarReporteInventario();
-    Map<String, Object> generarReporteMovimientosInventario(LocalDateTime fechaInicio, LocalDateTime fechaFin);
-    List<ReporteInventarioResponse> generarReporteProductosBajoStock();
-    List<ReporteInventarioResponse> generarReporteProductosAgotados();
-    Map<String, Object> generarReporteRotacionProductos();
-
-    // ============ REPORTES DE UTILIDADES ============
-    Map<String, Object> generarReporteUtilidades(LocalDate fechaInicio, LocalDate fechaFin);
-    Map<String, Object> generarReporteMargenGanancia();
-    Map<String, Object> generarReporteTopProductosRentables();
-
-    // ============ REPORTES DE CLIENTES ============
-    Map<String, Object> generarReporteClientes();
-    List<Map<String, Object>> generarReporteTopClientes(Integer limite);
-    Map<String, Object> generarReporteFrecuenciaClientes();
+    ReporteInventarioResponse generarReporteInventarioEstado();
+    List<Map<String, Object>> generarReporteMovimientosInventario(LocalDate fechaDesde, LocalDate fechaHasta, Long productoId, String tipoMovimiento);
+    Map<String, Object> generarReporteValoracionInventario();
+    List<Map<String, Object>> generarReporteAlertasStock();
+    List<Map<String, Object>> generarReporteRotacionProductos(LocalDate fechaDesde, LocalDate fechaHasta);
 
     // ============ REPORTES FINANCIEROS ============
-    Map<String, Object> generarBalanceGeneral(LocalDate fecha);
-    Map<String, Object> generarEstadoResultados(LocalDate fechaInicio, LocalDate fechaFin);
-    Map<String, Object> generarFlujoCaja(LocalDate fechaInicio, LocalDate fechaFin);
-
-    // ============ REPORTES PERSONALIZADOS ============
-    Map<String, Object> generarReportePersonalizado(FiltroReporteRequest filtro);
-    PaginacionResponse<Map<String, Object>> generarReportePaginado(FiltroReporteRequest filtro, Pageable pageable);
+    Map<String, Object> generarReporteUtilidades(LocalDate fechaDesde, LocalDate fechaHasta);
+    List<Map<String, Object>> generarReporteCompras(LocalDate fechaDesde, LocalDate fechaHasta);
+    List<Map<String, Object>> generarReporteGastos(LocalDate fechaDesde, LocalDate fechaHasta);
 
     // ============ EXPORTACIÓN ============
-    byte[] exportarReporteExcel(Map<String, Object> datos, String tipoReporte);
-    byte[] exportarReportePDF(Map<String, Object> datos, String tipoReporte);
-    byte[] exportarReporteCSV(Map<String, Object> datos, String tipoReporte);
+    byte[] exportarReporteVentasExcel(LocalDate fechaDesde, LocalDate fechaHasta);
+    byte[] exportarReporteInventarioExcel();
+    byte[] exportarCierreCajaPDF(Long id);
+    byte[] exportarFacturaPDF(Long ventaId);
+
+    // ============ DASHBOARD Y ESTADÍSTICAS ============
+    Map<String, Object> obtenerDashboardPrincipal();
+    Map<String, Object> obtenerDashboardVentas(LocalDate fechaDesde, LocalDate fechaHasta);
+    Map<String, Object> obtenerDashboardInventario();
+    Map<String, Object> obtenerEstadisticasResumen(LocalDate fechaDesde, LocalDate fechaHasta);
+    Map<String, Object> obtenerEstadisticasTiempoReal();
 }

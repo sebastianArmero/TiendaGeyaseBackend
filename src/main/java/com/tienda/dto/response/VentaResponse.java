@@ -17,32 +17,11 @@ public class VentaResponse {
 
     private Long id;
     private String numeroFactura;
-    private String prefijoFactura;
-    private Integer consecutivo;
 
     // Cliente
     private Long clienteId;
     private String clienteNombre;
     private String clienteDocumento;
-    private String clienteTelefono;
-
-    // Totales
-    private BigDecimal subtotal;
-    private BigDecimal descuentoTotal;
-    private BigDecimal ivaTotal;
-    private BigDecimal otrosImpuestos;
-    private BigDecimal total;
-
-    // Pago
-    private String formaPago;
-    private String estadoPago;
-    private BigDecimal efectivoRecibido;
-    private BigDecimal cambio;
-
-    // Estado
-    private String estado;
-    private String motivoAnulacion;
-    private LocalDateTime fechaAnulacion;
 
     // Vendedor
     private Long vendedorId;
@@ -56,9 +35,24 @@ public class VentaResponse {
 
     // Fechas
     private LocalDateTime fechaEmision;
-    private LocalDateTime creadoEn;
-    private LocalDateTime actualizadoEn;
+
+    // Totales
+    private BigDecimal subtotal;
+    private BigDecimal descuentoTotal;
+    private BigDecimal ivaTotal;
+    private BigDecimal total;
+    private BigDecimal efectivoRecibido;
+    private BigDecimal cambio;
+
+    // Estado
+    private String formaPago;
+    private String estadoPago;
+    private String estado;
+    private String motivoAnulacion;
 
     // Detalles
     private List<DetalleVentaResponse> detalles;
+
+    // Auditoría
+    private LocalDateTime creadoEn;
 }

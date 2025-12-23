@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -15,41 +16,41 @@ import java.util.Map;
 @AllArgsConstructor
 public class ReporteInventarioResponse {
 
-    private String tipoReporte;
-    private LocalDateTime fechaGeneracion;
+    private LocalDate fechaReporte;
 
-    // VALORACIÓN
+    // Resumen general
+    private Integer totalProductos;
+    private Integer productosActivos;
+    private Integer productosInactivos;
+
+    // Stock
+    private Integer productosConStock;
+    private Integer productosAgotados;
+    private Integer productosBajoStock;
+    private Integer productosSobreStock;
+
+    // Valoración
     private BigDecimal valorTotalCosto;
     private BigDecimal valorTotalVenta;
     private BigDecimal utilidadPotencial;
     private BigDecimal margenPromedio;
 
-    // ESTADÍSTICAS
-    private Integer totalProductos;
-    private Integer productosActivos;
-    private Integer productosInactivos;
-    private Integer productosConStock;
-    private Integer productosSinStock;
+    // Alertas
+    private List<Map<String, Object>> alertasCriticas;
+    private List<Map<String, Object>> productosParaReorden;
 
-    // ALERTAS DE STOCK
-    private Integer productosAgotados;
-    private Integer productosCriticos;
-    private Integer productosBajoStock;
-    private Integer productosSobreStock;
-    private Integer productosParaReorden;
-
-    // ROTACIÓN
-    private BigDecimal rotacionPromedio;
-    private Integer diasInventarioPromedio;
-    private Map<String, BigDecimal> rotacionPorCategoria;
-
-    // TOP PRODUCTOS
-    private Map<String, Object> topProductosValor;
-    private Map<String, Object> topProductosRotacion;
-    private Map<String, Object> topProductosUtilidad;
-
-    // DETALLES
+    // Distribución
     private Map<String, Integer> productosPorCategoria;
     private Map<String, BigDecimal> valorPorCategoria;
-    private Map<String, Integer> alertasPorTipo;
+
+    // Movimientos recientes
+    private List<Map<String, Object>> ultimosMovimientos;
+
+    // Productos más valiosos
+    private List<Map<String, Object>> productosMasValiosos;
+
+    // Rotación
+    private Map<String, BigDecimal> rotacionPorCategoria;
+
+    private LocalDate fechaGeneracion;
 }

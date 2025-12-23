@@ -15,43 +15,38 @@ import java.util.List;
 @AllArgsConstructor
 public class VentaRequest {
 
-    @NotNull(message = "El cliente es requerido")
+    @NotNull(message = "El ID del vendedor es obligatorio")
+    private Long vendedorId;
+
+    @NotNull(message = "El ID de la caja es obligatorio")
+    private Long cajaId;
+
     private Long clienteId;
 
-    private String clienteNombre;
-    private String clienteDocumento;
-    private String clienteDireccion;
-    private String clienteTelefono;
-    private String clienteEmail;
-
-    @NotEmpty(message = "Debe haber al menos un producto en la venta")
-    @Valid
-    private List<ItemVentaRequest> items;
-
-    private BigDecimal descuentoTotal;
-    private BigDecimal ivaTotal;
-    private BigDecimal otrosImpuestos;
-
-    @NotNull(message = "La forma de pago es requerida")
+    @NotNull(message = "La forma de pago es obligatoria")
     private String formaPago;
 
     private BigDecimal efectivoRecibido;
-    private Long cajaId;
-    private String observaciones;
+
+    @Valid
+    @NotEmpty(message = "Debe incluir al menos un producto en la venta")
+    private List<DetalleVentaRequest> detalles;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ItemVentaRequest {
-        @NotNull(message = "El producto es requerido")
+    public static class DetalleVentaRequest {
+
+        @NotNull(message = "El ID del producto es obligatorio")
         private Long productoId;
 
-        @NotNull(message = "La cantidad es requerida")
+        @NotNull(message = "La cantidad es obligatoria")
         private BigDecimal cantidad;
 
+        @NotNull(message = "El precio unitario es obligatorio")
         private BigDecimal precioUnitario;
-        private BigDecimal descuentoPorcentaje;
-        private BigDecimal descuentoUnitario;
-        private BigDecimal ivaPorcentaje;
+
+        private BigDecimal descuentoPorcentaje = BigDecimal.ZERO;
+        private BigDecimal ivaPorcentaje = BigDecimal.ZERO;
     }
 }

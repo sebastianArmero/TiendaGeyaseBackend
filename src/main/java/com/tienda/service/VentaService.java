@@ -1,9 +1,8 @@
 package com.tienda.service;
 
-import com.tienda.dto.request.AnularVentaRequest;
 import com.tienda.dto.request.VentaRequest;
-import com.tienda.dto.response.*;
-import com.tienda.model.Venta;
+import com.tienda.dto.response.VentaResponse;
+import com.tienda.dto.response.PaginacionResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -14,53 +13,35 @@ import java.util.Map;
 
 public interface VentaService {
 
-    // CRUD de ventas
-    VentaResponse crearVenta(VentaRequest request, Long vendedorId);
-    VentaResponse anularVenta(Long ventaId, AnularVentaRequest request, Long usuarioId);
+    // CRUD
+    VentaResponse crearVenta(VentaRequest request);
     VentaResponse obtenerVentaPorId(Long id);
-    VentaResponse obtenerVentaPorFactura(String numeroFactura);
-    List<VentaResponse> obtenerTodasVentas();
+    VentaResponse obtenerVentaPorNumeroFactura(String numeroFactura);
     PaginacionResponse<VentaResponse> obtenerVentasPaginadas(Pageable pageable);
 
-    // Búsquedas y filtros
+    // Filtros
     PaginacionResponse<VentaResponse> filtrarVentas(
             String numeroFactura, String clienteNombre, Long vendedorId,
-            String estado, LocalDateTime fechaDesde, LocalDateTime fechaHasta,
-            Pageable pageable);
+            String estado, LocalDate fechaDesde, LocalDate fechaHasta, Pageable pageable);
 
+    // Gestión de ventas
+    void anularVenta(Long id, String motivo);
+    String generarNumeroFactura();
+
+    // Consultas específicas
+    List<VentaResponse> obtenerVentasDelDia();
     List<VentaResponse> obtenerVentasPorCliente(Long clienteId);
     List<VentaResponse> obtenerVentasPorVendedor(Long vendedorId);
-    List<VentaResponse> obtenerVentasPorFecha(LocalDate fecha);
-    List<VentaResponse> obtenerVentasPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin);
+    List<VentaResponse> obtenerVentasPorRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin);
 
-    // Carrito y proceso de venta
-    CarritoResponse agregarAlCarrito(Long productoId, BigDecimal cantidad);
-    CarritoResponse obtenerCarrito();
-    void limpiarCarrito();
-    void removerDelCarrito(Long productoId);
-    CarritoResponse actualizarCantidadCarrito(Long productoId, BigDecimal cantidad);
-
-    // Validaciones
-    boolean verificarStockCarrito();
-    Map<String, Object> validarVenta(VentaRequest request);
+    // Estadísticas
+    Map<String, Object> obtenerEstadisticasDiarias(LocalDate fecha);
+    Map<String, Object> obtenerEstadisticasMensuales(int mes, int año);
+    Map<String, Object> obtenerDashboardVentas();
+    List<Map<String, Object>> obtenerTopProductosVendidos(int limite);
 
     // Métodos de negocio
-    String generarNumeroFactura();
-    BigDecimal calcularTotalVenta(VentaRequest request);
-    Map<String, BigDecimal> calcularTotalesVenta(VentaRequest request);
-
-    // Reportes y estadísticas
-    Map<String, Object> obtenerEstadisticasDiarias(LocalDate fecha);
-    Map<String, Object> obtenerEstadisticasMensuales(Integer mes, Integer anio);
-    List<Map<String, Object>> obtenerTopProductosVendidos(LocalDate fechaInicio, LocalDate fechaFin);
-    List<Map<String, Object>> obtenerTopClientes(LocalDate fechaInicio, LocalDate fechaFin);
-
-    // Para dashboard
-    BigDecimal obtenerVentasDelDia();
-    Integer obtenerCantidadVentasDelDia();
-    BigDecimal obtenerTicketPromedioDelDia();
-
-    // Métodos internos
-    Venta obtenerEntidadVenta(Long id);
-    void procesarVenta(Venta venta);
+    BigDecimal calcularTotalVentasDia(LocalDate fecha);
+    Long contarVentasDelDia();
+    boolean existeVentaConFactura(String numeroFactura);
 }

@@ -40,4 +40,15 @@ public interface DashboardService {
 
     // Métricas en tiempo real (para pantallas)
     Map<String, Object> obtenerMetricasTiempoReal();
+
+
+
+    Map<String, Object> obtenerDashboardCompleto();
+    Map<String, Object> obtenerDashboardVentas();
+    Map<String, Object> obtenerDashboardInventario();
+    Map<String, Object> obtenerMetricasClave();
+    Map<String, Object> obtenerVentasUltimos7Dias();
+    Map<String, Object> obtenerVentasPorMes(int año);
+    Map<String, Object> obtenerEstadisticasRapidas();
+    Map<String, Object> obtenerRendimientoSistema();
 }

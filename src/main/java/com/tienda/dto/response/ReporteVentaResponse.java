@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -16,41 +16,37 @@ import java.util.Map;
 @AllArgsConstructor
 public class ReporteVentaResponse {
 
-    private String periodo;
-    private LocalDate fecha;
-    private LocalDateTime fechaHora;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private String tipoReporte; // DIARIO, MENSUAL, RANGO
 
-    // TOTALES
-    private BigDecimal totalVentas;
-    private BigDecimal totalCosto;
-    private BigDecimal totalUtilidad;
-    private BigDecimal margenUtilidad;
+    // Totales
+    private Integer totalVentas;
+    private BigDecimal totalIngresos;
+    private BigDecimal totalDescuentos;
+    private BigDecimal totalIva;
+    private BigDecimal totalNeto;
 
-    // ESTADÍSTICAS
-    private Integer numeroVentas;
-    private Integer numeroProductosVendidos;
-    private Integer numeroClientes;
-    private Integer numeroVendedores;
-
-    // PROMEDIOS
+    // Promedios
     private BigDecimal ticketPromedio;
-    private BigDecimal itemsPorVenta;
-    private BigDecimal utilidadPromedio;
+    private Integer productosPromedioPorVenta;
 
-    // DESGLOSE
+    // Distribución
     private Map<String, BigDecimal> ventasPorFormaPago;
+    private Map<String, Integer> ventasPorEstado;
     private Map<String, BigDecimal> ventasPorVendedor;
-    private Map<String, BigDecimal> ventasPorCategoria;
-    private Map<String, BigDecimal> ventasPorHora;
 
-    // TENDENCIAS
-    private BigDecimal crecimientoVentas;
-    private BigDecimal crecimientoUtilidad;
-    private BigDecimal crecimientoClientes;
+    // Top
+    private List<Map<String, Object>> topProductos;
+    private List<Map<String, Object>> topClientes;
 
-    // COMPARATIVAS
-    private BigDecimal ventasPeriodoAnterior;
-    private BigDecimal utilidadPeriodoAnterior;
-    private BigDecimal variacionVentas;
-    private BigDecimal variacionUtilidad;
+    // Detalle diario (para reportes por rango)
+    private List<Map<String, Object>> detalleDiario;
+
+    // Estadísticas adicionales
+    private Integer clientesAtendidos;
+    private Integer vendedoresActivos;
+    private BigDecimal crecimientoVsPeriodoAnterior;
+
+    private LocalDate fechaGeneracion;
 }
