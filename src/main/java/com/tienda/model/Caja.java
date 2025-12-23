@@ -3,6 +3,7 @@ package com.tienda.model;
 import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +51,17 @@ public class Caja {
     private Usuario usuarioAsignado;
 
     @Column(name = "fecha_apertura")
-    private java.time.LocalDateTime fechaApertura;
+    private LocalDateTime fechaApertura;
 
     @Column(name = "fecha_cierre")
-    private java.time.LocalDateTime fechaCierre;
+    private LocalDateTime fechaCierre;
+
+    // ✅ Añadir campos de auditoría
+    @Column(name = "creado_en")
+    private LocalDateTime creadoEn;
+
+    @Column(name = "actualizado_en")
+    private LocalDateTime actualizadoEn;
 
     @OneToMany(mappedBy = "caja", fetch = FetchType.LAZY)
     @Builder.Default
@@ -62,6 +70,18 @@ public class Caja {
     @OneToMany(mappedBy = "caja", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<CierreCaja> cierres = new ArrayList<>();
+
+    // ✅ Añadir métodos del ciclo de vida
+    @PrePersist
+    protected void onCreate() {
+        this.creadoEn = LocalDateTime.now();
+        this.actualizadoEn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.actualizadoEn = LocalDateTime.now();
+    }
 
     public boolean estaAbierta() {
         return estado == EstadoCaja.ABIERTA;

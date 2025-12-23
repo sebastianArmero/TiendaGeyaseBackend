@@ -38,5 +38,13 @@ public interface CierreCajaRepository extends JpaRepository<CierreCaja, Long> {
     List<CierreCaja> findBySucursalAndFecha(@Param("sucursalId") Long sucursalId,
                                             @Param("fecha") LocalDate fecha);
 
+    @Query("SELECT MONTH(c.fechaCierre) as mes, YEAR(c.fechaCierre) as año, " +
+            "SUM(COALESCE(c.totalVentas, 0)) as totalVentas, " +
+            "SUM(COALESCE(c.totalEgresos, 0)) as totalEgresos " +
+            "FROM CierreCaja c " +
+            "WHERE c.estado = 'APROBADO' " +
+            "GROUP BY YEAR(c.fechaCierre), MONTH(c.fechaCierre) " +
+            "ORDER BY YEAR(c.fechaCierre) DESC, MONTH(c.fechaCierre) DESC")
+    List<Object[]> resumenMensual();
 
 }

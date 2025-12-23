@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
 
 @Data
 @Builder
@@ -18,46 +17,49 @@ import java.util.Map;
 public class CierreCajaResponse {
 
     private Long id;
-    private String cajaNombre;
+
+    // Información de caja
     private Long cajaId;
+    private String cajaNombre;
+    private String cajaCodigo;
+
+    // Fechas y horarios
     private LocalDate fechaCierre;
     private LocalTime horaApertura;
     private LocalTime horaCierre;
-    private String usuarioNombre;
-    private Long usuarioId;
 
-    // SALDOS
+    // Usuario
+    private Long usuarioId;
+    private String usuarioNombre;
+
+    // Saldos
     private BigDecimal saldoInicial;
     private BigDecimal saldoFinalTeorico;
     private BigDecimal saldoFinalReal;
     private BigDecimal diferencia;
 
-    // TOTALES
+    // Totales por tipo de operación
     private BigDecimal totalVentas;
     private BigDecimal totalCompras;
     private BigDecimal totalGastos;
     private BigDecimal totalIngresos;
     private BigDecimal totalEgresos;
 
-    // FORMAS DE PAGO
+    // Totales por forma de pago
     private BigDecimal efectivo;
     private BigDecimal tarjetas;
     private BigDecimal transferencias;
     private BigDecimal otrosMedios;
 
-    // ESTADOS
+    // Estado y observaciones
     private String estado;
     private String observaciones;
-    private String conciliadoPor;
+
+    // Conciliación
+    private Long conciliadoPorId;
+    private String conciliadoPorNombre;
     private LocalDateTime fechaConciliacion;
 
-    // DETALLES
-    private Integer numeroVentas;
-    private Integer numeroCompras;
-    private Integer numeroGastos;
-    private Map<String, BigDecimal> ventasPorFormaPago;
-    private Map<String, Object> resumen;
-
-    // AUDITORÍA
+    // Auditoría
     private LocalDateTime creadoEn;
 }
